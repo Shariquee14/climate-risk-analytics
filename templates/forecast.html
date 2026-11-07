@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}Forecast · ClimateCast{% endblock %}
+{% block content %}
+<h1>Forecast from a chosen date</h1>
+<form method="get" class="row">
+  <label>Date <input type="date" name="date" value="{{ date }}" min="{{ dmin }}" max="{{ dmax }}" required></label>
+  <button>Forecast</button>
+</form>
+{% if error %}<div class="alert">{{ error }}</div>{% endif %}
+<p class="muted">Showing the 7 days after <b>{{ date }}</b>.
+{% if unseen %}This date lies in the <b>unseen test period</b> (on/after {{ split }}), so the comparison with actual values is an honest test.
+{% else %}This date is inside the <b>training period</b> (before {{ split }}), so the model has seen this data — pick a later date for an honest test.{% endif %}</p>
+<img class="chart" alt="Forecast chart" src="data:image/png;base64,{{ chart }}">
+{% include "_table.html" %}
+{% endblock %}

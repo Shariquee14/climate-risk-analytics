@@ -1,0 +1,11 @@
+<div class="scroll"><table>
+<thead><tr><th>Day</th><th>Date</th><th>Avg temp (°C)</th><th>Likely range</th><th>Rain chance</th><th>Outlook</th>
+{% if fc[0].actual_temp is defined %}<th>Actual temp</th><th>Actual rain (mm)</th><th>Error (°C)</th>{% endif %}</tr></thead>
+<tbody>
+{% for f in fc %}
+<tr><td>+{{ f.day }} ({{ f.weekday }})</td><td>{{ f.date }}</td><td><b>{{ f.temp }}</b></td>
+<td>{{ f.low }} – {{ f.high }}</td><td>{{ f.rain_prob }}%</td><td>{{ f.condition }}</td>
+{% if f.actual_temp is defined %}<td>{{ f.actual_temp }}</td><td>{{ f.actual_rain }}</td><td>{{ '%+.1f'|format(f.error) }}</td>
+{% elif fc[0].actual_temp is defined %}<td>–</td><td>–</td><td>–</td>{% endif %}</tr>
+{% endfor %}
+</tbody></table></div>

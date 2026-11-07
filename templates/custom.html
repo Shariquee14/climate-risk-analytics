@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}Your Readings · ClimateCast{% endblock %}
+{% block content %}
+<h1>Forecast from your own readings</h1>
+<p class="muted">Enter today's weather readings and get the next 7 days. Because only one day is entered, recent history is assumed steady (a simplification), so accuracy is lower than for the dataset-based forecast.</p>
+{% if errors %}<div class="alert"><ul>{% for e in errors %}<li>{{ e }}</li>{% endfor %}</ul></div>{% endif %}
+<form method="post" class="grid">
+  <label>Date <input type="date" name="date" value="{{ form.date }}" required></label>
+  {% for key, (lo, hi, label) in fields.items() %}
+  <label>{{ label }} <input type="number" step="0.1" min="{{ lo }}" max="{{ hi }}" name="{{ key }}" value="{{ form[key] }}" required></label>
+  {% endfor %}
+  <button>Predict</button>
+</form>
+{% if fc %}
+<h2>Result</h2>
+<img class="chart" alt="Forecast chart" src="data:image/png;base64,{{ chart }}">
+{% include "_table.html" %}
+{% endif %}
+{% endblock %}

@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Climate Trends · ClimateCast{% endblock %}
+{% block content %}
+<h1>Climate trends</h1>
+{% if trend %}
+<div class="stats">
+  <div><span>{{ '%+.2f'|format(trend.slope_per_decade) }} °C</span>Warming per decade</div>
+  <div><span>{{ trend.p_value }}</span>p-value (trend)</div>
+  <div><span>{{ trend.r2 }}</span>R² of trend line</div>
+  <div><span>{{ '%.0f'|format(annual.rain.mean()) }} mm</span>Mean yearly rainfall</div>
+  <div><span>{{ '%.1f'|format(annual.hottest.max()) }}°C</span>Hottest day on record</div>
+</div>
+{% endif %}
+<h2>Annual mean temperature &amp; trend</h2>
+<img class="chart" alt="Annual temperature trend" src="data:image/png;base64,{{ c_trend }}">
+<h2>Seasonal pattern (climatograph)</h2>
+<img class="chart" alt="Climatograph" src="data:image/png;base64,{{ c_clim }}">
+<h2>Total rainfall per year</h2>
+<img class="chart" alt="Annual rainfall" src="data:image/png;base64,{{ c_rain }}">
+<h2>Yearly summary</h2>
+<div class="scroll"><table><thead><tr><th>Year</th><th>Mean temp (°C)</th><th>Hottest day (°C)</th><th>Rainfall (mm)</th><th>Rain days</th></tr></thead><tbody>
+{% for y, r in annual.iterrows() %}<tr><td>{{ y }}</td><td>{{ '%.2f'|format(r.temp) }}</td><td>{{ '%.1f'|format(r.hottest) }}</td><td>{{ '%.0f'|format(r.rain) }}</td><td>{{ r.rain_days }}</td></tr>{% endfor %}
+</tbody></table></div>
+{% endblock %}

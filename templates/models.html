@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Model Performance · ClimateCast{% endblock %}
+{% block content %}
+<h1>Model performance</h1>
+<p class="muted">All scores are measured on <b>unseen test data</b> ({{ art.n_test }} days from {{ art.split_date }} onward); models were trained on {{ art.n_train }} earlier days.</p>
+<h2>Temperature: model comparison (1 day ahead)</h2>
+<img class="chart" alt="Model comparison" src="data:image/png;base64,{{ c_cmp }}">
+<div class="scroll"><table><thead><tr><th>Model</th><th>MAE (°C)</th><th>RMSE (°C)</th><th>R²</th></tr></thead><tbody>
+{% for name, m in art.comparison.items() %}<tr class="{{ 'best' if name == art.best_model }}"><td>{{ name }}{% if name == art.best_model %} ⭐ selected{% endif %}</td><td>{{ m.mae }}</td><td>{{ m.rmse }}</td><td>{{ m.r2 }}</td></tr>{% endfor %}
+</tbody></table></div>
+<h2>Predicted vs actual (first 120 test days)</h2>
+<img class="chart" alt="Predicted vs actual" src="data:image/png;base64,{{ c_pa }}">
+<h2>Accuracy by forecast horizon</h2>
+<img class="chart" alt="Error by horizon" src="data:image/png;base64,{{ c_hor }}">
+<div class="scroll"><table><thead><tr><th>Days ahead</th><th>MAE</th><th>RMSE</th><th>R²</th><th>Rain accuracy</th><th>Rain precision</th><th>Rain recall</th><th>Rain F1</th><th>Rain AUC</th></tr></thead><tbody>
+{% for h, m in art.horizon_metrics.items() %}<tr><td>+{{ h }}</td><td>{{ m.reg.mae }}</td><td>{{ m.reg.rmse }}</td><td>{{ m.reg.r2 }}</td><td>{{ m.rain.accuracy }}</td><td>{{ m.rain.precision }}</td><td>{{ m.rain.recall }}</td><td>{{ m.rain.f1 }}</td><td>{{ m.rain.auc }}</td></tr>{% endfor %}
+</tbody></table></div>
+<p class="muted">Rain ("will it rain ≥ 1 mm?") is harder than temperature. Only {{ (art.rain_baselines.wet_day_share * 100)|round(1) }}% of test days are rainy, so "always dry" already scores {{ art.rain_baselines.always_dry_accuracy }} accuracy and "same as today" scores {{ art.rain_baselines.persistence_accuracy }}. The model's value shows in recall/F1/AUC, which those trivial rules cannot match.</p>
+<h2>Which inputs matter most?</h2>
+<img class="chart" alt="Feature importance" src="data:image/png;base64,{{ c_imp }}">
+{% endblock %}

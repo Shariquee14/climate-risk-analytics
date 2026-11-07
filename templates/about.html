@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}About · ClimateCast{% endblock %}
+{% block content %}
+<h1>About this project</h1>
+<h2>Objective</h2>
+<p>Forecast daily average temperature and rain chance for the next 7 days from recent weather observations, and analyse long-term climate trends, using machine learning.</p>
+<h2>Method</h2>
+<ol>
+<li><b>Data:</b> {{ n_days }} daily records ({{ start }} to {{ end }}): max/min temperature, humidity, rainfall, wind speed, pressure.</li>
+<li><b>Features:</b> today's readings, temperature lags (1, 2, 3, 7 days), rolling averages, rolling rainfall, pressure change, and day-of-year (sine/cosine) for seasonality.</li>
+<li><b>Models:</b> Linear Regression, Random Forest and Gradient Boosting are compared against two baselines (persistence and climatology); the best by RMSE ({{ art.best_model }}) forecasts temperature. A Random Forest classifier predicts rain probability. One model per horizon (+1 … +7 days).</li>
+<li><b>Evaluation:</b> strict time-based split — trained on the earlier part, tested on the most recent {{ art.n_test }} days. No shuffling, no future leakage.</li>
+<li><b>Climate analysis:</b> annual means, linear warming trend (with p-value), seasonal climatograph, rainfall totals.</li>
+</ol>
+<h2>Important note about the data</h2>
+<div class="alert">The bundled dataset is <b>synthetically generated</b> to behave like a central-India climate (hot summers, June–September monsoon, mild winters, slight warming trend). It is not a real weather record. To use real data (e.g. from Open-Meteo, NASA POWER or Kaggle), save a CSV with columns <code>date, temp_max, temp_min, humidity, rainfall, wind_speed, pressure</code> as <code>data/weather_data.csv</code> and run <code>python train.py</code>.</div>
+<h2>Limitations</h2>
+<ul><li>Statistical models on one location's history cannot match physics-based numerical weather prediction.</li>
+<li>The "Your Readings" page assumes steady recent history because it receives a single day of input.</li>
+<li>Likely ranges are approximate (based on typical test error, 80% level).</li></ul>
+{% endblock %}

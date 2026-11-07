@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% block title %}Climate & Weather Forecasting{% endblock %}</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<header>
+  <div class="wrap bar">
+    <a class="brand" href="{{ url_for('index') }}">🌦️ ClimateCast</a>
+    <nav>
+      <a href="{{ url_for('index') }}" class="{{ 'on' if page=='home' }}">Dashboard</a>
+      <a href="{{ url_for('forecast_page') }}" class="{{ 'on' if page=='forecast' }}">Forecast</a>
+      <a href="{{ url_for('custom') }}" class="{{ 'on' if page=='custom' }}">Your Readings</a>
+      <a href="{{ url_for('climate') }}" class="{{ 'on' if page=='climate' }}">Climate Trends</a>
+      <a href="{{ url_for('models') }}" class="{{ 'on' if page=='models' }}">Model Performance</a>
+      <a href="{{ url_for('about') }}" class="{{ 'on' if page=='about' }}">About</a>
+    </nav>
+  </div>
+</header>
+<main class="wrap">{% block content %}{% endblock %}</main>
+<footer class="wrap">Minor Project · Climate &amp; Weather Forecasting using Machine Learning</footer>
+</body>
+</html>

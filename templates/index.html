@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>7-Day Forecast</h1>
+<p class="muted">Forecast issued from the latest observations in the dataset ({{ last }}). Model: <b>{{ art.best_model }}</b>.</p>
+<div class="cards">
+{% for f in fc %}
+  <div class="card"><div class="muted">{{ f.weekday }} · {{ f.date[5:] }}</div>
+  <div class="big">{{ f.temp }}°C</div><div>{{ f.condition }}</div>
+  <div class="muted">☔ {{ f.rain_prob }}% · {{ f.low }}–{{ f.high }}°</div></div>
+{% endfor %}
+</div>
+<h2>Latest observation ({{ last }})</h2>
+<div class="stats">
+  <div><span>{{ '%.1f'|format(today.temp_max) }}°C</span>Max temp</div>
+  <div><span>{{ '%.1f'|format(today.temp_min) }}°C</span>Min temp</div>
+  <div><span>{{ '%.0f'|format(today.humidity) }}%</span>Humidity</div>
+  <div><span>{{ '%.1f'|format(today.rainfall) }} mm</span>Rainfall</div>
+  <div><span>{{ '%.1f'|format(today.wind_speed) }} km/h</span>Wind</div>
+  <div><span>{{ '%.0f'|format(today.pressure) }} hPa</span>Pressure</div>
+</div>
+<h2>Last 6 months</h2>
+<img class="chart" alt="History chart" src="data:image/png;base64,{{ chart }}">
+<p class="muted">Dataset: {{ n_days }} days of daily records from {{ start }} to {{ last }}.</p>
+{% endblock %}
